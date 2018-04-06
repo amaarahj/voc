@@ -155,11 +155,31 @@ class TimeModuleTests(TranspileTestCase):
 
     #######################################################
     # gmtime
-    @expectedFailure
+    
     def test_gmtime(self):
         self.assertCodeExecution("""
             import time
             print(time.gmtime())
+            print(time.gmtime()[2])
+            """)
+
+    def test_gmtime_with_parameter(self):
+        self.assertCodeExecution("""
+            import time
+            print(time.gmtime(0))
+            print(time.gmtime(1000.75))
+            # try:
+            #     time.gmtime('today')
+            # except Exception as e:
+            #     print(e)
+            # try:
+            #     time.gmtime((20,18))
+            # except Exception as e:
+            #     print(e)
+            # try:
+            #     time.gmtime([20,18])
+            # except Exception as e:
+            #     print(e)
             """)
 
     #######################################################

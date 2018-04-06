@@ -55,6 +55,35 @@ public class time extends org.python.types.Module {
     private static long vm_start_time;
     public static org.python.Object _STRUCT_TM_ITEMS;
 
+    //(tm_year=2018, tm_mon=4, tm_mday=6, tm_hour=2, tm_min=24,
+    // tm_sec=59, tm_wday=4, tm_yday=96, tm_isdst=0)
+    static class struct_time extends org.python.types.Module {
+        
+        org.python.types.Tuple tuple;
+
+            //parse value from tuple index
+        public org.python.Object __getitem__(org.python.Object index) {
+            return tuple.__getitem__(index);
+        }
+        
+        public void setitems(String datein) {            
+            java.util.List<org.python.Object> item;
+            item = new java.util.ArrayList<org.python.Object>();
+            item.add(new org.python.types.Str("tm_year="));
+            item.add(new org.python.types.Str("tm_mon="));
+            item.add(new org.python.types.Str("tm_mday="));
+            item.add(new org.python.types.Str("tm_hour="));
+            item.add(new org.python.types.Str("tm_min="));
+            item.add(new org.python.types.Str("tm_sec="));
+            item.add(new org.python.types.Str("tm_wday="));
+            item.add(new org.python.types.Str("tm_yday="));
+            item.add(new org.python.types.Str("tm_isdst="));
+            tuple = new org.python.types.Tuple(item);
+            System.out.println(datein);
+        }
+    }
+
+
     @org.python.Attribute
     public static org.python.Object __file__ = new org.python.types.Str("python/common/python/time.java");
     @org.python.Attribute
@@ -129,10 +158,33 @@ public class time extends org.python.types.Module {
     }
 
     @org.python.Method(
-            __doc__ = ""
-    )
-    public static org.python.Object gmtime() {
-        throw new org.python.exceptions.NotImplementedError("time.gmtime() has not been implemented.");
+        __doc__ = "gmtime(seconds) -> _STRUCT_TM_ITEMS\n" +
+                  "\n" +
+                  "Convert a time expressed in seconds since the Epoch to a struct_time in UTC in\n" +
+                  "which the dst flag is always zero. If secs is not provided or None, the current\n"+
+                  "time as returned by time() is used. Fractions of a second are ignored.",
+        default_args = {"seconds"}
+
+)
+    public static org.python.Object gmtime(org.python.Object seconds) {
+        java.util.Date date;
+        if ((seconds == null) || (seconds instanceof org.python.types.NoneType))  {
+        long currentTimeInMillis = System.currentTimeMillis();
+        date = new java.util.Date(currentTimeInMillis);
+        } else {
+        if (!(seconds instanceof org.python.types.Int) && !(seconds instanceof org.python.types.Float)) {
+        throw new org.python.exceptions.TypeError("an integer is required (got type " + seconds.typeName() + ")");
+        }
+        date = new java.util.Date(((org.python.types.Int) seconds.__int__()).value * 1000L);
+        }
+        java.text.SimpleDateFormat ft = new java.text.SimpleDateFormat("yyyy MM d HH mm ss E D");
+        String padded_date = ft.format(date);
+
+        System.out.println("From code");
+        struct_time test = new struct_time();
+        test.setitems(padded_date);
+         return test;
+ 
     }
 
     @org.python.Method(
