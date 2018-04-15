@@ -199,8 +199,6 @@ public class time extends org.python.types.Module {
             sb.append(padded_date.substring(9, padded_date.length()));
             padded_date = sb.toString();
         }
-        System.out.println("gmtime test");
-        System.out.println(gmtime(seconds));
         return new org.python.types.Str(padded_date);
     }
 
@@ -233,13 +231,13 @@ public class time extends org.python.types.Module {
         }
         date = new java.util.Date(((org.python.types.Int) seconds.__int__()).value * 1000L);
         }
-        java.text.SimpleDateFormat ft = new java.text.SimpleDateFormat("yyyy MM d HH mm ss E D");
+        java.text.SimpleDateFormat ft = new java.text.SimpleDateFormat("yyyy M d H m s E D");
         String padded_date = ft.format(date);
 
 
         STRUCT_TM_ITEMS test = new STRUCT_TM_ITEMS();
         test.setitems(padded_date);
-        // System.out.println(test);
+        System.out.println(test);
         return test;
  
     }

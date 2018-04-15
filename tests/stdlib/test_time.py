@@ -160,26 +160,30 @@ class TimeModuleTests(TranspileTestCase):
         self.assertCodeExecution("""
             import time
             print(time.gmtime())
-            print(time.gmtime()[2])
+            print(time.gmtime()[2]
+            print(time.gmtime()[:5])
             """)
 
     def test_gmtime_with_parameter(self):
         self.assertCodeExecution("""
             import time
-            print(time.gmtime(0))
+            print(time.gmtime(0))            
+            print(time.gmtime(1000))
             print(time.gmtime(1000.75))
-            # try:
-            #     time.gmtime('today')
-            # except Exception as e:
-            #     print(e)
-            # try:
-            #     time.gmtime((20,18))
-            # except Exception as e:
-            #     print(e)
-            # try:
-            #     time.gmtime([20,18])
-            # except Exception as e:
-            #     print(e)
+            now = time.time()
+            print(time.gmtime((now - (now % 3600))))
+            try:
+                time.gmtime('today')
+            except Exception as e:
+                print(e)
+            try:
+                time.gmtime((20,18))
+            except Exception as e:
+                print(e)
+            try:
+                time.gmtime([20,18])
+            except Exception as e:
+                print(e)
             """)
 
     #######################################################
