@@ -80,17 +80,16 @@ public class time extends org.python.types.Module {
         
         @Override
         public String toString() {
-            // getClass()
-            
-            return getClass().getSimpleName() + "(tm_year=" + tuple.__getitem__(new org.python.types.Slice(new org.python.types.Int(0))) + 
-                ", tm_mon=" + tuple.__getitem__(new org.python.types.Slice(new org.python.types.Int(1))) +
-                ", tm_mday=" + tuple.__getitem__(new org.python.types.Slice(new org.python.types.Int(2))) +
-                ", tm_hour=" + tuple.__getitem__(new org.python.types.Slice(new org.python.types.Int(3))) +
-                ", tm_min=" + tuple.__getitem__(new org.python.types.Slice(new org.python.types.Int(4))) +
-                ", tm_sec=" + tuple.__getitem__(new org.python.types.Slice(new org.python.types.Int(5))) +
-                ", tm_wday=" + tuple.__getitem__(new org.python.types.Slice(new org.python.types.Int(6))) +
-                ", tm_yday=" + tuple.__getitem__(new org.python.types.Slice(new org.python.types.Int(7))) +
-                ", tm_isdst=" + tuple.__getitem__(new org.python.types.Slice(new org.python.types.Int(8))) +")";
+            org.python.Object iter = tuple.__iter__();
+            return "time.struct_time(tm_year=" + iter.__next__() + 
+                ", tm_mon=" + iter.__next__() +
+                ", tm_mday=" + iter.__next__() +
+                ", tm_hour=" + iter.__next__() +
+                ", tm_min=" + iter.__next__() +
+                ", tm_sec=" + iter.__next__() +
+                ", tm_wday=" + iter.__next__() +
+                ", tm_yday=" + iter.__next__() +
+                ", tm_isdst=" + iter.__next__() +")";
         }
         public void setitems(String datein) {            
             java.util.List<org.python.Object> item;
@@ -104,18 +103,25 @@ public class time extends org.python.types.Module {
                     wday += "0";
                     break;
                 case "Tue":
+                    wday += "1";
+                    break;
                 case "Wed":
+                    wday += "2";
+                    break;
                 case "Thu":
                     wday += "3";
                     break;
-                case "Fri":
-                case "Sat":
+                case "Fri":                
+                    wday += "4";
+                    break;
+                case "Sat":                
+                    wday += "5";
+                    break;
                 case "Sun":
                     wday += "6";
                     break;
             }
             
-            System.out.println(wday);
 
             item.add(new org.python.types.Str(splited[0]));            
             item.add(new org.python.types.Str(splited[1]));
@@ -127,7 +133,6 @@ public class time extends org.python.types.Module {
             item.add(new org.python.types.Str(splited[7]));
             item.add(new org.python.types.Str("tm_isdst="));
             tuple = new org.python.types.Tuple(item);
-            System.out.println(datein);
         }
     }
 
@@ -230,18 +235,11 @@ public class time extends org.python.types.Module {
         }
         java.text.SimpleDateFormat ft = new java.text.SimpleDateFormat("yyyy MM d HH mm ss E D");
         String padded_date = ft.format(date);
-        //2018 04 13 17 04 16 Fri 103
 
-        System.out.println("From code");
-        // ava.lang.StringBuilder sb = new StringBuilder();
-        // sb.append(padded_date.substring(21, 31));
-        // System.out.println(sb);
-    
 
         STRUCT_TM_ITEMS test = new STRUCT_TM_ITEMS();
-
         test.setitems(padded_date);
-        System.out.println(test);
+        // System.out.println(test);
         return test;
  
     }
