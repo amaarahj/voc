@@ -1,5 +1,7 @@
 package python;
 
+import java.util.Calendar;
+
 @org.python.Module(
         __doc__ =
                 "This module provides various functions to manipulate time values.\n" +
@@ -53,30 +55,76 @@ public class time extends org.python.types.Module {
     }
 
     private static long vm_start_time;
-    public static org.python.Object _STRUCT_TM_ITEMS;
-
-    //(tm_year=2018, tm_mon=4, tm_mday=6, tm_hour=2, tm_min=24,
-    // tm_sec=59, tm_wday=4, tm_yday=96, tm_isdst=0)
-    static class struct_time extends org.python.types.Module {
+    // @org.python.Module(
+    //     __doc__ =    "The tuple items are:\n" +
+    //                 "  year (including century, e.g. 1998)\n" +
+    //                 "  month (1-12)\n" +
+    //                 "  day (1-31)\n" +
+    //                 "  hours (0-23)\n" +
+    //                 "  minutes (0-59)\n" +
+    //                 "  seconds (0-59)\n" +
+    //                 "  weekday (0-6, Monday is 0)\n" +
+    //                 "  Julian day (day in the year, 1-366)\n" +
+    //                 "  DST (Daylight Savings Time) flag (-1, 0 or 1)\n" +
+    //                 "If the DST flag is 0, the time is given in the regular time zone;\n" +
+    //                 "if it is 1, the time is given in the DST time zone;\n" +
+    //                 "if it is -1, mktime() should guess based on the date and time.\n" +
+    // )
+    static class STRUCT_TM_ITEMS extends org.python.types.Module {
         
         org.python.types.Tuple tuple;
-
-            //parse value from tuple index
+        
         public org.python.Object __getitem__(org.python.Object index) {
             return tuple.__getitem__(index);
         }
         
+        @Override
+        public String toString() {
+            // getClass()
+            
+            return getClass().getSimpleName() + "(tm_year=" + tuple.__getitem__(new org.python.types.Slice(new org.python.types.Int(0))) + 
+                ", tm_mon=" + tuple.__getitem__(new org.python.types.Slice(new org.python.types.Int(1))) +
+                ", tm_mday=" + tuple.__getitem__(new org.python.types.Slice(new org.python.types.Int(2))) +
+                ", tm_hour=" + tuple.__getitem__(new org.python.types.Slice(new org.python.types.Int(3))) +
+                ", tm_min=" + tuple.__getitem__(new org.python.types.Slice(new org.python.types.Int(4))) +
+                ", tm_sec=" + tuple.__getitem__(new org.python.types.Slice(new org.python.types.Int(5))) +
+                ", tm_wday=" + tuple.__getitem__(new org.python.types.Slice(new org.python.types.Int(6))) +
+                ", tm_yday=" + tuple.__getitem__(new org.python.types.Slice(new org.python.types.Int(7))) +
+                ", tm_isdst=" + tuple.__getitem__(new org.python.types.Slice(new org.python.types.Int(8))) +")";
+        }
         public void setitems(String datein) {            
             java.util.List<org.python.Object> item;
             item = new java.util.ArrayList<org.python.Object>();
-            item.add(new org.python.types.Str("tm_year="));
-            item.add(new org.python.types.Str("tm_mon="));
-            item.add(new org.python.types.Str("tm_mday="));
-            item.add(new org.python.types.Str("tm_hour="));
-            item.add(new org.python.types.Str("tm_min="));
-            item.add(new org.python.types.Str("tm_sec="));
-            item.add(new org.python.types.Str("tm_wday="));
-            item.add(new org.python.types.Str("tm_yday="));
+            
+            String[] splited =datein.split(" ");
+            String dayOfWeek= splited[6];
+            String wday = "";
+            switch(dayOfWeek){
+                case "Mon": 
+                    wday += "0";
+                    break;
+                case "Tue":
+                case "Wed":
+                case "Thu":
+                    wday += "3";
+                    break;
+                case "Fri":
+                case "Sat":
+                case "Sun":
+                    wday += "6";
+                    break;
+            }
+            
+            System.out.println(wday);
+
+            item.add(new org.python.types.Str(splited[0]));            
+            item.add(new org.python.types.Str(splited[1]));
+            item.add(new org.python.types.Str(splited[2]));
+            item.add(new org.python.types.Str(splited[3]));
+            item.add(new org.python.types.Str(splited[4]));
+            item.add(new org.python.types.Str(splited[5]));
+            item.add(new org.python.types.Str(wday));
+            item.add(new org.python.types.Str(splited[7]));
             item.add(new org.python.types.Str("tm_isdst="));
             tuple = new org.python.types.Tuple(item);
             System.out.println(datein);
@@ -84,6 +132,7 @@ public class time extends org.python.types.Module {
     }
 
 
+    public static org.python.Object _STRUCT_TM_ITEMS;
     @org.python.Attribute
     public static org.python.Object __file__ = new org.python.types.Str("python/common/python/time.java");
     @org.python.Attribute
@@ -145,6 +194,8 @@ public class time extends org.python.types.Module {
             sb.append(padded_date.substring(9, padded_date.length()));
             padded_date = sb.toString();
         }
+        System.out.println("gmtime test");
+        System.out.println(gmtime(seconds));
         return new org.python.types.Str(padded_date);
     }
 
@@ -179,11 +230,19 @@ public class time extends org.python.types.Module {
         }
         java.text.SimpleDateFormat ft = new java.text.SimpleDateFormat("yyyy MM d HH mm ss E D");
         String padded_date = ft.format(date);
+        //2018 04 13 17 04 16 Fri 103
 
         System.out.println("From code");
-        struct_time test = new struct_time();
+        // ava.lang.StringBuilder sb = new StringBuilder();
+        // sb.append(padded_date.substring(21, 31));
+        // System.out.println(sb);
+    
+
+        STRUCT_TM_ITEMS test = new STRUCT_TM_ITEMS();
+
         test.setitems(padded_date);
-         return test;
+        System.out.println(test);
+        return test;
  
     }
 
