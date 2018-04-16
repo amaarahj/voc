@@ -1,6 +1,7 @@
 package python;
 
 import java.util.Calendar;
+import python.time.struct_time;
 
 @org.python.Module(
         __doc__ =
@@ -55,23 +56,23 @@ public class time extends org.python.types.Module {
     }
 
     private static long vm_start_time;
-    // @org.python.Module(
-    //     __doc__ =    "The tuple items are:\n" +
-    //                 "  year (including century, e.g. 1998)\n" +
-    //                 "  month (1-12)\n" +
-    //                 "  day (1-31)\n" +
-    //                 "  hours (0-23)\n" +
-    //                 "  minutes (0-59)\n" +
-    //                 "  seconds (0-59)\n" +
-    //                 "  weekday (0-6, Monday is 0)\n" +
-    //                 "  Julian day (day in the year, 1-366)\n" +
-    //                 "  DST (Daylight Savings Time) flag (-1, 0 or 1)\n" +
-    //                 "If the DST flag is 0, the time is given in the regular time zone;\n" +
-    //                 "if it is 1, the time is given in the DST time zone;\n" +
-    //                 "if it is -1, mktime() should guess based on the date and time.\n" +
-    // )
-    static class STRUCT_TM_ITEMS extends org.python.types.Module {
-        
+
+    @org.python.Module(
+        __doc__ =    "The tuple items are:\n" +
+                    "  year (including century, e.g. 1998)\n" +
+                    "  month (1-12)\n" +
+                    "  day (1-31)\n" +
+                    "  hours (0-23)\n" +
+                    "  minutes (0-59)\n" +
+                    "  seconds (0-59)\n" +
+                    "  weekday (0-6, Monday is 0)\n" +
+                    "  Julian day (day in the year, 1-366)\n" +
+                    "  DST (Daylight Savings Time) flag (-1, 0 or 1)\n" +
+                    "If the DST flag is 0, the time is given in the regular time zone;\n" +
+                    "if it is 1, the time is given in the DST time zone;\n" +
+                    "if it is -1, mktime() should guess based on the date and time.\n" 
+    ) 
+    static class struct_time extends org.python.types.Module {
         org.python.types.Tuple tuple;
         
         public org.python.Object __getitem__(org.python.Object index) {
@@ -91,10 +92,9 @@ public class time extends org.python.types.Module {
                 ", tm_yday=" + iter.__next__() +
                 ", tm_isdst=" + iter.__next__() +")";
         }
-        public void setitems(String datein) {            
+        public void setitems(String datein, String dst) {            
             java.util.List<org.python.Object> item;
             item = new java.util.ArrayList<org.python.Object>();
-            
             String[] splited =datein.split(" ");
             String dayOfWeek= splited[6];
             String wday = "";
@@ -121,8 +121,6 @@ public class time extends org.python.types.Module {
                     wday += "6";
                     break;
             }
-            
-
             item.add(new org.python.types.Str(splited[0]));            
             item.add(new org.python.types.Str(splited[1]));
             item.add(new org.python.types.Str(splited[2]));
@@ -131,11 +129,10 @@ public class time extends org.python.types.Module {
             item.add(new org.python.types.Str(splited[5]));
             item.add(new org.python.types.Str(wday));
             item.add(new org.python.types.Str(splited[7]));
-            item.add(new org.python.types.Str("tm_isdst="));
+            item.add(new org.python.types.Str(dst));
             tuple = new org.python.types.Tuple(item);
         }
     }
-
 
     public static org.python.Object _STRUCT_TM_ITEMS;
     @org.python.Attribute
@@ -233,13 +230,12 @@ public class time extends org.python.types.Module {
         }
         java.text.SimpleDateFormat ft = new java.text.SimpleDateFormat("yyyy M d H m s E D");
         String padded_date = ft.format(date);
-
-
-        STRUCT_TM_ITEMS test = new STRUCT_TM_ITEMS();
-        test.setitems(padded_date);
+        // STRUCT_TM_ITEMS test = new STRUCT_TM_ITEMS();
+        struct_time test = new struct_time();
+        test.setitems(padded_date, "0");
         System.out.println(test);
         return test;
- 
+        // return _STRUCT_TM_ITEMS;
     }
 
     @org.python.Method(

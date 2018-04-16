@@ -8,7 +8,6 @@ class TimeModuleTests(TranspileTestCase):
 
     #######################################################
     # _STRUCT_TM_ITEMS
-    @expectedFailure
     def test__STRUCT_TM_ITEMS(self):
         self.assertCodeExecution("""
             import time
@@ -155,21 +154,22 @@ class TimeModuleTests(TranspileTestCase):
 
     #######################################################
     # gmtime
-    
     def test_gmtime(self):
         self.assertCodeExecution("""
             import time
             print(time.gmtime())
-            print(time.gmtime()[2]
+            print(time.gmtime()[2])
+            print(time.gmtime()[4:])
             print(time.gmtime()[:5])
             """)
 
     def test_gmtime_with_parameter(self):
         self.assertCodeExecution("""
             import time
-            print(time.gmtime(0))            
+            print(time.gmtime(0))
             print(time.gmtime(1000))
             print(time.gmtime(1000.75))
+            print(time.gmtime(-2208988801))
             now = time.time()
             print(time.gmtime((now - (now % 3600))))
             try:
