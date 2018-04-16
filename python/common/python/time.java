@@ -120,6 +120,8 @@ public class time extends org.python.types.Module {
                 case "Sun":
                     wday = 6;
                     break;
+                default:
+                    System.out.println("Invalid wday");
             }
             for (int i = 0; i < splited.length; ++i) {
                 if (i != 6){
