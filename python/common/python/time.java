@@ -82,10 +82,12 @@ public class time extends org.python.types.Module {
             return tuple.__getitem__(index);
         }
         
+        // public org.python.Object __str__();
+    
         @Override
-        public String toString() {
+        public org.python.types.Str __repr__() {
             org.python.Object iter = tuple.__iter__();
-            return "time.struct_time(tm_year=" + iter.__next__() + 
+            String formatted = "time.struct_time(tm_year=" + iter.__next__() + 
                 ", tm_mon=" + iter.__next__() +
                 ", tm_mday=" + iter.__next__() +
                 ", tm_hour=" + iter.__next__() +
@@ -94,7 +96,9 @@ public class time extends org.python.types.Module {
                 ", tm_wday=" + iter.__next__() +
                 ", tm_yday=" + iter.__next__() +
                 ", tm_isdst=" + iter.__next__() +")";
+                return new org.python.types.Str(formatted);
         }
+
         public void setitems(String datein, Integer dst) {            
             java.util.List<org.python.Object> item;
             item = new java.util.ArrayList<org.python.Object>();
@@ -145,7 +149,8 @@ public class time extends org.python.types.Module {
         }
     }
 
-    public static org.python.Object _STRUCT_TM_ITEMS;
+    @org.python.Attribute
+    public static org.python.Object _STRUCT_TM_ITEMS = new org.python.types.Int(11);
     @org.python.Attribute
     public static org.python.Object __file__ = new org.python.types.Str("python/common/python/time.java");
     @org.python.Attribute
@@ -220,7 +225,7 @@ public class time extends org.python.types.Module {
     }
 
     @org.python.Method(
-        __doc__ = "gmtime(seconds) -> _STRUCT_TM_ITEMS\n" +
+        __doc__ = "gmtime(seconds) -> struct_time\n" +
                   "\n" +
                   "Convert a time expressed in seconds since the Epoch to a struct_time in UTC in\n" +
                   "which the dst flag is always zero. If secs is not provided or None, the current\n"+
@@ -231,22 +236,19 @@ public class time extends org.python.types.Module {
     public static org.python.Object gmtime(org.python.Object seconds) {
         java.util.Date date;
         if ((seconds == null) || (seconds instanceof org.python.types.NoneType))  {
-        long currentTimeInMillis = System.currentTimeMillis();
-        date = new java.util.Date(currentTimeInMillis);
+            long currentTimeInMillis = System.currentTimeMillis();
+            date = new java.util.Date(currentTimeInMillis);
         } else {
-        if (!(seconds instanceof org.python.types.Int) && !(seconds instanceof org.python.types.Float)) {
-        throw new org.python.exceptions.TypeError("an integer is required (got type " + seconds.typeName() + ")");
-        }
-        date = new java.util.Date(((org.python.types.Int) seconds.__int__()).value * 1000L);
+            if (!(seconds instanceof org.python.types.Int) && !(seconds instanceof org.python.types.Float)) {
+                throw new org.python.exceptions.TypeError("an integer is required (got type " + seconds.typeName() + ")");
+            }
+            date = new java.util.Date(((org.python.types.Int) seconds.__int__()).value * 1000L);
         }
         java.text.SimpleDateFormat ft = new java.text.SimpleDateFormat("yyyy M d H m s E D");
         String padded_date = ft.format(date);
-        // STRUCT_TM_ITEMS test = new STRUCT_TM_ITEMS();
-        struct_time test = new struct_time();
-        test.setitems(padded_date, 0);
-        // System.out.println(test);
-        return test;
-        // return _STRUCT_TM_ITEMS;
+        struct_time gm_struct = new struct_time();
+        gm_struct.setitems(padded_date, 0);
+        return gm_struct;
     }
 
     @org.python.Method(
