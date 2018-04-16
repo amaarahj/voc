@@ -1,11 +1,5 @@
 package python;
 
-import java.text.Format;
-import java.time.DayOfWeek;
-import java.util.Calendar;
-import python.time.struct_time;
-import sun.security.util.Length;
-
 @org.python.Module(
         __doc__ =
                 "This module provides various functions to manipulate time values.\n" +
