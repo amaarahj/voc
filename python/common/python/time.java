@@ -1,7 +1,10 @@
 package python;
 
+import java.text.Format;
+import java.time.DayOfWeek;
 import java.util.Calendar;
 import python.time.struct_time;
+import sun.security.util.Length;
 
 @org.python.Module(
         __doc__ =
@@ -92,44 +95,52 @@ public class time extends org.python.types.Module {
                 ", tm_yday=" + iter.__next__() +
                 ", tm_isdst=" + iter.__next__() +")";
         }
-        public void setitems(String datein, String dst) {            
+        public void setitems(String datein, Integer dst) {            
             java.util.List<org.python.Object> item;
             item = new java.util.ArrayList<org.python.Object>();
             String[] splited =datein.split(" ");
             String dayOfWeek= splited[6];
-            String wday = "";
+            int[] date = new int[splited.length];
+            int wday = 0;
             switch(dayOfWeek){
                 case "Mon": 
-                    wday += "0";
+                    wday = 0;
                     break;
                 case "Tue":
-                    wday += "1";
+                    wday = 1;
                     break;
                 case "Wed":
-                    wday += "2";
+                    wday = 2;
                     break;
                 case "Thu":
-                    wday += "3";
+                    wday = 3;
                     break;
                 case "Fri":                
-                    wday += "4";
+                    wday = 4;
                     break;
                 case "Sat":                
-                    wday += "5";
+                    wday = 5;
                     break;
                 case "Sun":
-                    wday += "6";
+                    wday = 6;
                     break;
             }
-            item.add(new org.python.types.Str(splited[0]));            
-            item.add(new org.python.types.Str(splited[1]));
-            item.add(new org.python.types.Str(splited[2]));
-            item.add(new org.python.types.Str(splited[3]));
-            item.add(new org.python.types.Str(splited[4]));
-            item.add(new org.python.types.Str(splited[5]));
-            item.add(new org.python.types.Str(wday));
-            item.add(new org.python.types.Str(splited[7]));
-            item.add(new org.python.types.Str(dst));
+            for (int i = 0; i < splited.length; ++i){
+                if (i != 6){
+                    date[i] = Integer.parseInt(splited[i]);
+                }else{
+                    date[i]= wday;
+                }
+            }
+            item.add(new org.python.types.Int(date[0]));            
+            item.add(new org.python.types.Int(date[1]));
+            item.add(new org.python.types.Int(date[2]));
+            item.add(new org.python.types.Int(date[3]));
+            item.add(new org.python.types.Int(date[4]));
+            item.add(new org.python.types.Int(date[5]));
+            item.add(new org.python.types.Int(date[6]));
+            item.add(new org.python.types.Int(date[7]));
+            item.add(new org.python.types.Int(dst));
             tuple = new org.python.types.Tuple(item);
         }
     }
@@ -232,8 +243,8 @@ public class time extends org.python.types.Module {
         String padded_date = ft.format(date);
         // STRUCT_TM_ITEMS test = new STRUCT_TM_ITEMS();
         struct_time test = new struct_time();
-        test.setitems(padded_date, "0");
-        System.out.println(test);
+        test.setitems(padded_date, 0);
+        // System.out.println(test);
         return test;
         // return _STRUCT_TM_ITEMS;
     }
