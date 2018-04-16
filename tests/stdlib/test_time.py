@@ -160,7 +160,6 @@ class TimeModuleTests(TranspileTestCase):
             print(time.gmtime())
             print(time.gmtime()[2])
             print(time.gmtime()[:5])
-            print(time.gmtime()[4:])
             """)
 
     def test_gmtime_with_parameter(self):
