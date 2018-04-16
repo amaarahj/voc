@@ -67,7 +67,7 @@ public class time extends org.python.types.Module {
                     "  DST (Daylight Savings Time) flag (-1, 0 or 1)\n" +
                     "If the DST flag is 0, the time is given in the regular time zone;\n" +
                     "if it is 1, the time is given in the DST time zone;\n" +
-                    "if it is -1, mktime() should guess based on the date and time.\n" 
+                    "if it is -1, mktime() should guess based on the date and time.\n"
     ) 
     static class struct_time extends org.python.types.Module {
         org.python.types.Tuple tuple;
