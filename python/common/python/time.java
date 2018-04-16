@@ -61,7 +61,7 @@ public class time extends org.python.types.Module {
     private static long vm_start_time;
 
     @org.python.Module(
-        __doc__ =    "The tuple items are:\n" +
+            __doc__ = "The tuple items are:\n" +
                     "  year (including century, e.g. 1998)\n" +
                     "  month (1-12)\n" +
                     "  day (1-31)\n" +
@@ -81,8 +81,6 @@ public class time extends org.python.types.Module {
         public org.python.Object __getitem__(org.python.Object index) {
             return tuple.__getitem__(index);
         }
-        
-        // public org.python.Object __str__();
     
         @Override
         public org.python.types.Str __repr__() {
@@ -225,12 +223,12 @@ public class time extends org.python.types.Module {
     }
 
     @org.python.Method(
-        __doc__ = "gmtime(seconds) -> struct_time\n" +
-                  "\n" +
-                  "Convert a time expressed in seconds since the Epoch to a struct_time in UTC in\n" +
-                  "which the dst flag is always zero. If secs is not provided or None, the current\n"+
-                  "time as returned by time() is used. Fractions of a second are ignored.",
-        default_args = {"seconds"}
+            __doc__ = "gmtime(seconds) -> struct_time\n" +
+                    "\n" +
+                    "Convert a time expressed in seconds since the Epoch to a struct_time in UTC in\n" +
+                    "which the dst flag is always zero. If secs is not provided or None, the current\n"+
+                    "time as returned by time() is used. Fractions of a second are ignored.",
+            default_args = {"seconds"}
 
 )
     public static org.python.Object gmtime(org.python.Object seconds) {
