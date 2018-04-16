@@ -1,5 +1,11 @@
 package python;
 
+import java.text.Format;
+import java.time.DayOfWeek;
+import java.util.Calendar;
+import python.time.struct_time;
+import sun.security.util.Length;
+
 @org.python.Module(
         __doc__ =
                 "This module provides various functions to manipulate time values.\n" +
@@ -53,8 +59,98 @@ public class time extends org.python.types.Module {
     }
 
     private static long vm_start_time;
-    public static org.python.Object _STRUCT_TM_ITEMS;
 
+    @org.python.Module(
+        __doc__ =    "The tuple items are:\n" +
+                    "  year (including century, e.g. 1998)\n" +
+                    "  month (1-12)\n" +
+                    "  day (1-31)\n" +
+                    "  hours (0-23)\n" +
+                    "  minutes (0-59)\n" +
+                    "  seconds (0-59)\n" +
+                    "  weekday (0-6, Monday is 0)\n" +
+                    "  Julian day (day in the year, 1-366)\n" +
+                    "  DST (Daylight Savings Time) flag (-1, 0 or 1)\n" +
+                    "If the DST flag is 0, the time is given in the regular time zone;\n" +
+                    "if it is 1, the time is given in the DST time zone;\n" +
+                    "if it is -1, mktime() should guess based on the date and time.\n" 
+    ) 
+    static class struct_time extends org.python.types.Module {
+        org.python.types.Tuple tuple;
+        
+        public org.python.Object __getitem__(org.python.Object index) {
+            return tuple.__getitem__(index);
+        }
+        
+        // public org.python.Object __str__();
+    
+        @Override
+        public org.python.types.Str __repr__() {
+            org.python.Object iter = tuple.__iter__();
+            String formatted = "time.struct_time(tm_year=" + iter.__next__() + 
+                ", tm_mon=" + iter.__next__() +
+                ", tm_mday=" + iter.__next__() +
+                ", tm_hour=" + iter.__next__() +
+                ", tm_min=" + iter.__next__() +
+                ", tm_sec=" + iter.__next__() +
+                ", tm_wday=" + iter.__next__() +
+                ", tm_yday=" + iter.__next__() +
+                ", tm_isdst=" + iter.__next__() +")";
+                return new org.python.types.Str(formatted);
+        }
+
+        public void setitems(String datein, Integer dst) {            
+            java.util.List<org.python.Object> item;
+            item = new java.util.ArrayList<org.python.Object>();
+            String[] splited =datein.split(" ");
+            String dayOfWeek= splited[6];
+            int[] date = new int[splited.length];
+            int wday = 0;
+            switch(dayOfWeek){
+                case "Mon": 
+                    wday = 0;
+                    break;
+                case "Tue":
+                    wday = 1;
+                    break;
+                case "Wed":
+                    wday = 2;
+                    break;
+                case "Thu":
+                    wday = 3;
+                    break;
+                case "Fri":                
+                    wday = 4;
+                    break;
+                case "Sat":                
+                    wday = 5;
+                    break;
+                case "Sun":
+                    wday = 6;
+                    break;
+            }
+            for (int i = 0; i < splited.length; ++i){
+                if (i != 6){
+                    date[i] = Integer.parseInt(splited[i]);
+                }else{
+                    date[i]= wday;
+                }
+            }
+            item.add(new org.python.types.Int(date[0]));            
+            item.add(new org.python.types.Int(date[1]));
+            item.add(new org.python.types.Int(date[2]));
+            item.add(new org.python.types.Int(date[3]));
+            item.add(new org.python.types.Int(date[4]));
+            item.add(new org.python.types.Int(date[5]));
+            item.add(new org.python.types.Int(date[6]));
+            item.add(new org.python.types.Int(date[7]));
+            item.add(new org.python.types.Int(dst));
+            tuple = new org.python.types.Tuple(item);
+        }
+    }
+
+    @org.python.Attribute
+    public static org.python.Object _STRUCT_TM_ITEMS = new org.python.types.Int(11);
     @org.python.Attribute
     public static org.python.Object __file__ = new org.python.types.Str("python/common/python/time.java");
     @org.python.Attribute
@@ -129,10 +225,30 @@ public class time extends org.python.types.Module {
     }
 
     @org.python.Method(
-            __doc__ = ""
-    )
-    public static org.python.Object gmtime() {
-        throw new org.python.exceptions.NotImplementedError("time.gmtime() has not been implemented.");
+        __doc__ = "gmtime(seconds) -> struct_time\n" +
+                  "\n" +
+                  "Convert a time expressed in seconds since the Epoch to a struct_time in UTC in\n" +
+                  "which the dst flag is always zero. If secs is not provided or None, the current\n"+
+                  "time as returned by time() is used. Fractions of a second are ignored.",
+        default_args = {"seconds"}
+
+)
+    public static org.python.Object gmtime(org.python.Object seconds) {
+        java.util.Date date;
+        if ((seconds == null) || (seconds instanceof org.python.types.NoneType))  {
+            long currentTimeInMillis = System.currentTimeMillis();
+            date = new java.util.Date(currentTimeInMillis);
+        } else {
+            if (!(seconds instanceof org.python.types.Int) && !(seconds instanceof org.python.types.Float)) {
+                throw new org.python.exceptions.TypeError("an integer is required (got type " + seconds.typeName() + ")");
+            }
+            date = new java.util.Date(((org.python.types.Int) seconds.__int__()).value * 1000L);
+        }
+        java.text.SimpleDateFormat ft = new java.text.SimpleDateFormat("yyyy M d H m s E D");
+        String padded_date = ft.format(date);
+        struct_time gm_struct = new struct_time();
+        gm_struct.setitems(padded_date, 0);
+        return gm_struct;
     }
 
     @org.python.Method(
