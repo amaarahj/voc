@@ -68,18 +68,18 @@ public class time extends org.python.types.Module {
                     "If the DST flag is 0, the time is given in the regular time zone;\n" +
                     "if it is 1, the time is given in the DST time zone;\n" +
                     "if it is -1, mktime() should guess based on the date and time.\n"
-    ) 
+    )
     static class struct_time extends org.python.types.Module {
         org.python.types.Tuple tuple;
         
         public org.python.Object __getitem__(org.python.Object index) {
             return tuple.__getitem__(index);
         }
-    
+
         @Override
         public org.python.types.Str __repr__() {
             org.python.Object iter = tuple.__iter__();
-            String formatted = "time.struct_time(tm_year=" + iter.__next__() + 
+            String formatted = "time.struct_time(tm_year=" + iter.__next__() +
                 ", tm_mon=" + iter.__next__() +
                 ", tm_mday=" + iter.__next__() +
                 ", tm_hour=" + iter.__next__() +
@@ -88,10 +88,10 @@ public class time extends org.python.types.Module {
                 ", tm_wday=" + iter.__next__() +
                 ", tm_yday=" + iter.__next__() +
                 ", tm_isdst=" + iter.__next__() +")";
-                return new org.python.types.Str(formatted);
+            return new org.python.types.Str(formatted);
         }
 
-        public void setitems(String datein, Integer dst) {            
+        public void setitems(String datein, Integer dst) {
             java.util.List<org.python.Object> item;
             item = new java.util.ArrayList<org.python.Object>();
             String[] splited =datein.split(" ");
@@ -99,7 +99,7 @@ public class time extends org.python.types.Module {
             int[] date = new int[splited.length];
             int wday = 0;
             switch(dayOfWeek){
-                case "Mon": 
+                case "Mon":
                     wday = 0;
                     break;
                 case "Tue":
@@ -111,24 +111,24 @@ public class time extends org.python.types.Module {
                 case "Thu":
                     wday = 3;
                     break;
-                case "Fri":                
+                case "Fri":
                     wday = 4;
                     break;
-                case "Sat":                
+                case "Sat":
                     wday = 5;
                     break;
                 case "Sun":
                     wday = 6;
                     break;
             }
-            for (int i = 0; i < splited.length; ++i){
+            for (int i = 0; i < splited.length; ++i) {
                 if (i != 6){
                     date[i] = Integer.parseInt(splited[i]);
-                }else{
+                } else {
                     date[i]= wday;
                 }
             }
-            item.add(new org.python.types.Int(date[0]));            
+            item.add(new org.python.types.Int(date[0]));
             item.add(new org.python.types.Int(date[1]));
             item.add(new org.python.types.Int(date[2]));
             item.add(new org.python.types.Int(date[3]));
@@ -223,11 +223,10 @@ public class time extends org.python.types.Module {
                     "which the dst flag is always zero. If secs is not provided or None, the current\n"+
                     "time as returned by time() is used. Fractions of a second are ignored.",
             default_args = {"seconds"}
-
-)
+    )
     public static org.python.Object gmtime(org.python.Object seconds) {
         java.util.Date date;
-        if ((seconds == null) || (seconds instanceof org.python.types.NoneType))  {
+        if ((seconds == null) || (seconds instanceof org.python.types.NoneType)) {
             long currentTimeInMillis = System.currentTimeMillis();
             date = new java.util.Date(currentTimeInMillis);
         } else {
