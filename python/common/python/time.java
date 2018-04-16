@@ -80,14 +80,14 @@ public class time extends org.python.types.Module {
         public org.python.types.Str __repr__() {
             org.python.Object iter = tuple.__iter__();
             String formatted = "time.struct_time(tm_year=" + iter.__next__() +
-                ", tm_mon=" + iter.__next__() +
-                ", tm_mday=" + iter.__next__() +
-                ", tm_hour=" + iter.__next__() +
-                ", tm_min=" + iter.__next__() +
-                ", tm_sec=" + iter.__next__() +
-                ", tm_wday=" + iter.__next__() +
-                ", tm_yday=" + iter.__next__() +
-                ", tm_isdst=" + iter.__next__() +")";
+                    ", tm_mon=" + iter.__next__() +
+                    ", tm_mday=" + iter.__next__() +
+                    ", tm_hour=" + iter.__next__() +
+                    ", tm_min=" + iter.__next__() +
+                    ", tm_sec=" + iter.__next__() +
+                    ", tm_wday=" + iter.__next__() +
+                    ", tm_yday=" + iter.__next__() +
+                    ", tm_isdst=" + iter.__next__() +")";
             return new org.python.types.Str(formatted);
         }
 
