@@ -71,7 +71,7 @@ public class time extends org.python.types.Module {
     )
     static class struct_time extends org.python.types.Module {
         org.python.types.Tuple tuple;
-        
+
         public org.python.Object __getitem__(org.python.Object index) {
             return tuple.__getitem__(index);
         }
